@@ -8,18 +8,10 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ("text", "group")
         help_text = {
-            'text': 'Текст',
+            'text': 'Текст поста',
             'group': 'Группа',
         }
         labels = {
-            'text': 'Текст',
+            'text': 'Текст поста',
             'group': 'Группа',
         }
-
-    def clean_subject(self):
-        data = self.cleaned_data['text']
-        if '' not in data():
-            raise forms.ValidationError(
-                'Поле не может быть пустым'
-            )
-        return data
