@@ -68,16 +68,17 @@ def post_create(request):
     return redirect('posts:profile', username=request.user)
 
 
+@login_required
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    form = PostForm(request.POST or None)
+    form = PostForm(request.POST or None, instance=post)
     context = {
         'form': form,
         'is_edit': True,
     }
-    if request.user == post.author:
+    if request.user != post.author:
         return redirect('posts:post_detail', post_id=post.id)
     if not form.is_valid():
         return render(request, 'posts/post_create.html', context)
     form.save()
-    redirect('posts:post_detail', post_id=post.id)
+    return redirect('posts:post_detail', post_id=post.id)
